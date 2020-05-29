@@ -1,0 +1,9 @@
+[Unit]
+Description=Electric Rocker Plate
+After=multi-user.target
+
+[Service]
+ExecStart=/home/pi/electric-rocker.py
+
+[Install]
+WantedBy=multi-user.target
