@@ -95,11 +95,18 @@ def zone_color(power):
 class PowerMeter(BicyclePower):
     def __init__(self, node, network):
         super(PowerMeter, self).__init__(
-            node, network, callbacks={'onPowerData': self.power_data})
+            node,
+            network,
+            callbacks={
+                'onPowerData': self.power_data,
+            })
         self.previous_count = None
         self.previous_power = None
         self.power = None
         self.cadence = None
+
+    def __str__(self):
+        print('(power={}, cadence={})'.format(self.power, self.cadence))
 
     def power_data(self, count, _differ, _ratio, cadence, apower, ipower):
         if cadence is not None:
