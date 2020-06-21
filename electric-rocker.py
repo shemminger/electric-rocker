@@ -181,7 +181,8 @@ if __name__ == "__main__":
                 colorWipe(strip, color, wait_ms=1000 / LED_COUNT)
             elif cadence == 0:
                 # sleep if not pedaling
-                time.sleep(1)
+                colorWipe(strip, Color(0, 0, 0), wait_ms=10)
+                time.sleep(5)
             else:
                 # default animation of 50ms == cadence 200
                 delay_ms = 10000 / cadence
