@@ -1,0 +1,9 @@
+[Unit]
+Description=Electric Rack
+After=multi-user.target
+
+[Service]
+ExecStart=/home/pi/electric-rack.py
+
+[Install]
+WantedBy=multi-user.target

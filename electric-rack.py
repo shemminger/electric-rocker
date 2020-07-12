@@ -10,15 +10,16 @@ import signal
 import time
 import sys
 
+import board
+import adafruit_ws2801
+
 from ant.core import driver
 from ant.core.node import Node, Network, ChannelID
 from ant.core.constants import NETWORK_KEY_ANT_PLUS, NETWORK_NUMBER_PUBLIC, TIMEOUT_NEVER
 from ant.core.exceptions import DriverError
 from ant.plus.power import *
 
-import board
-from adafruit_ws2801 import WS2801
-
+# LED strip
 NUMLEDS = 30
 
 # Rider configuration
@@ -105,25 +106,37 @@ def sigterm_handler(_signo, _stack_frame):
 
 
 if __name__ == "__main__":
-    leds = WS2801(board.D6, board.D5, NUMLEDS)
-    leds.fill(0)
+    leds =  adafruit_ws2801.WS2801(board.SCLK, board.MOSI,
+                                   NUMLEDS, auto_write=False)
+    leds.fill((255, 0, 0))
+    leds.show()
 
     # Configure ANT
     print('Configure..')
     device = driver.USB2Driver(idVendor=0x0fcf, idProduct=0x1008)
 
+    leds.fill((0, 255, 0))
+    leds.show()
     print('Starting...')
     antnode = Node(device)
     antnode.start()
+
+    leds.fill((0, 0, 255))
+    leds.show()
 
     network = Network(key=NETWORK_KEY_ANT_PLUS, name='N:ANT+')
     antnode.setNetworkKey(NETWORK_NUMBER_PUBLIC, network)
     print('Ant...')
 
+    leds.fill((0, 0, 255))
+    leds.show()
     meter = PowerMeter(antnode, network)
     meter.open(searchTimeout=TIMEOUT_NEVER)
     print('Power...')
 
+    leds.fill((0, 0, 0))
+    leds.show()
+    
     signal.signal(signal.SIGTERM, sigterm_handler)
 
     try:
